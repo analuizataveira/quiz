@@ -6,3 +6,113 @@ datasource db {
   provider = "postgresql"
   url      = env("PG_CONNECTION_STRING")
 }
+
+// User model - Estrutura simplificada conforme solicitado
+model User {
+    id String @id @default(uuid()) @db.Uuid
+
+    name      String
+    score     Int    @default(0)
+    character String // Personagem favorito do usuário do The Office
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    quizAttempts QuizAttempt[]
+    userAnswers  UserAnswer[]
+
+    @@map("User")
+}
+
+// Question model - Estrutura pensada para ser simples e eficiente
+model Question {
+    id String @id @default(uuid()) @db.Uuid
+
+    // Pergunta principal
+    description String // A pergunta em si
+    
+    // Opções de resposta (4 opções em formato JSON ou campos separados)
+    optionA String
+    optionB String
+    optionC String
+    optionD String
+    
+    // Resposta correta (A, B, C ou D)
+    correctAnswer String // "A", "B", "C" ou "D"
+    
+    // Explicação quando acerta
+    explanation String // Explicação da resposta correta
+    
+    // Informações extras para categorização
+    difficulty    DifficultyEnum @default(EASY)
+    category      String? // "characters", "episodes", "quotes", "relationships"
+    season        Int?    // Temporada do The Office
+    episode       Int?    // Episódio específico
+    
+    // Metadados
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    // Relacionamentos
+    userAnswers  UserAnswer[]
+
+    @@map("Question")
+}
+
+// Quiz Attempt - Tentativa de quiz do usuário
+model QuizAttempt {
+    id String @id @default(uuid()) @db.Uuid
+
+    // Informações da tentativa
+    score          Int       @default(0)
+    totalQuestions Int       @default(0)
+    correctAnswers Int       @default(0)
+    completedAt    DateTime?
+    timeSpent      Int?      // em segundos
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relacionamentos
+    userId String @db.Uuid
+    user   User   @relation(fields: [userId], references: [id])
+
+    userAnswers UserAnswer[]
+
+    @@map("QuizAttempt")
+}
+
+// User Answer - Resposta individual do usuário
+model UserAnswer {
+    id String @id @default(uuid()) @db.Uuid
+
+    // Resposta dada pelo usuário
+    selectedAnswer String  // "A", "B", "C" ou "D"
+    isCorrect      Boolean @default(false)
+    timeSpent      Int?    // tempo em segundos para responder esta pergunta
+    
+    // Timestamp
+    answeredAt DateTime @default(now())
+
+    // Relacionamentos
+    userId String @db.Uuid
+    user   User   @relation(fields: [userId], references: [id])
+
+    questionId String   @db.Uuid
+    question   Question @relation(fields: [questionId], references: [id])
+
+    quizAttemptId String      @db.Uuid
+    quizAttempt   QuizAttempt @relation(fields: [quizAttemptId], references: [id])
+
+    @@map("UserAnswer")
+}
+
+// Enums
+enum DifficultyEnum {
+    EASY
+    MEDIUM
+    HARD
+}

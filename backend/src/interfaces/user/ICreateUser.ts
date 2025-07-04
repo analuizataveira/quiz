@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { UserStatusEnum } from "@enums/UserStatusEnum";
 
 export const CreateUserSchema = z.object({
   name: z
@@ -11,44 +10,29 @@ export const CreateUserSchema = z.object({
     .max(100, "Name must be less than 100 characters")
     .trim(),
 
-  email: z
+  character: z
     .string({
-      required_error: "Email is required",
-      invalid_type_error: "Email must be a string",
+      required_error: "Character is required",
+      invalid_type_error: "Character must be a string",
     })
-    .email("Email must be a valid email address")
+    .min(1, "Character cannot be empty")
+    .max(50, "Character must be less than 50 characters")
     .trim(),
 
-  password: z
-    .string({
-      required_error: "Password is required",
-      invalid_type_error: "Password must be a string",
+  score: z
+    .number({
+      invalid_type_error: "Score must be a number",
     })
-    .min(8, "Password must be at least 8 characters")
-    .max(50, "Password must be less than 50 characters")
-    .refine(
-      (password) => /[A-Z]/.test(password),
-      "Password must contain at least one uppercase letter"
-    )
-    .refine(
-      (password) => /[a-z]/.test(password),
-      "Password must contain at least one lowercase letter"
-    )
-    .refine(
-      (password) => /[0-9]/.test(password),
-      "Password must contain at least one number"
-    )
-    .refine(
-      (password) => /[^A-Za-z0-9]/.test(password),
-      "Password must contain at least one special character"
-    ),
-
-  avatar: z.string().url("Avatar must be a valid URL").optional(),
+    .int("Score must be an integer")
+    .min(0, "Score cannot be negative")
+    .optional()
+    .default(0),
 });
 
 export type CreateUserDto = z.infer<typeof CreateUserSchema>;
 
-export type CreateUserData = CreateUserDto & {
-  balance: number;
-  status: UserStatusEnum;
-};
+export type CreateUserData = CreateUserDto;
+
+export interface ICreateUser {
+  execute(createUserData: CreateUserData): Promise<any>;
+}
