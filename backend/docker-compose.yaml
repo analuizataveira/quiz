@@ -1,0 +1,46 @@
+services:
+  postgres-db:
+    container_name: postgres-db
+    image: postgres:16-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=fastify-ignite
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=strongPassword
+    networks:
+      - fastify-ignite_net
+    volumes:
+      - fastify-ignite_pg_vol:/var/lib/postgresql/data
+
+  # api:
+  #   container_name: api
+  #   env_file:
+  #     - .env
+  #   build:
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - DB_DATABASE=${DB_DATABASE}
+  #   restart: unless-stopped
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - postgres-db
+
+  # mongo-db:
+  #   image: mongo
+  #   container_name: mongo-db
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=mongoadmin
+  #     - MONGO_INITDB_ROOT_PASSWORD=secret
+
+volumes:
+  fastify-ignite_pg_vol:
+  fastify-ignite_redis_vol:
+
+networks:
+  fastify-ignite_net:
+    name: fastify-ignite_net

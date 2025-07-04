@@ -1,0 +1,25 @@
+model User {
+    id String @id @default(uuid()) @db.Uuid
+
+    name     String
+    email    String         @unique
+    password String
+    avatar   String?
+    balance  Float
+    status   UserStatusEnum @default(ACTIVE)
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    skins Skin[]
+
+    @@index([email])
+    @@map("User")
+}
+
+enum UserStatusEnum {
+    ACTIVE
+    INACTIVE
+    DELETED
+}
