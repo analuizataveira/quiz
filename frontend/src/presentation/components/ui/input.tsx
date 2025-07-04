@@ -1,33 +1,21 @@
-import { cn } from "@/utils/cn"
-import * as React from 'react';
+import * as React from "react"
+import { clsx } from "clsx"
 
-export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  showPassword?: boolean;
-  fill?: string;
-  search?: boolean;
-};
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ showPassword, className, type, fill, search, ...props }, ref) => {
-    return (
-      <div
-        className={cn(
-          'flex h-10 w-full outline-none bg-transparent text-sm rounded',
-          className,
-          `text-${fill}`,
-        )}
-      >
-        <input
-          value={props.value}
-          type={type === 'password' && showPassword ? 'text' : type}
-          className={`w-full h-full outline-none bg-transparent text-sm ${search && 'mr-24'}`}
-          ref={ref}
-          {...props}
-        />
-      </div>
-    );
-  },
-);
-Input.displayName = 'Input';
+const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type, ...props }, ref) => {
+  return (
+    <input
+      type={type}
+      className={clsx(
+        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        className,
+      )}
+      ref={ref}
+      {...props}
+    />
+  )
+})
+Input.displayName = "Input"
 
-export { Input };
+export { Input }
