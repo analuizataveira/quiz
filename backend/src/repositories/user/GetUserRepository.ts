@@ -15,10 +15,10 @@ export class GetUserRepository {
     });
   }
 
-  async getByEmail(email: string) {
-    return this.prisma.user.findUnique({
+  async getByName(name: string) {
+    return this.prisma.user.findFirst({
       where: {
-        email,
+        name,
       },
     });
   }

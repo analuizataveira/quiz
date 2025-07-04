@@ -1,9 +1,7 @@
 import { CreateUserDto, CreateUserData } from "@interfaces/user/ICreateUser";
 import { CreateUserRepository } from "@repositories/user/CreateUserRepository";
 import { GetUserRepository } from "@repositories/user/GetUserRepository";
-import { UserStatusEnum } from "@enums/UserStatusEnum";
 import { HTTPError } from "@config/errors";
-import { hash } from "bcryptjs";
 
 export class CreateUserService {
   private createUserRepository: CreateUserRepository;
@@ -18,21 +16,17 @@ export class CreateUserService {
   }
 
   async execute(createUserDto: CreateUserDto) {
-    const existingUser = await this.getUserRepository.getByEmail(
-      createUserDto.email
+    // Verificar se já existe um usuário com o mesmo nome
+    const existingUser = await this.getUserRepository.getByName(
+      createUserDto.name
     );
 
     if (existingUser) {
-      throw new HTTPError(409, "User with this email already exists");
+      throw new HTTPError(409, "User with this name already exists");
     }
-
-    const hashedPassword = await hash(createUserDto.password, 10);
 
     const userData: CreateUserData = {
       ...createUserDto,
-      status: UserStatusEnum.ACTIVE,
-      balance: 0,
-      password: hashedPassword,
     };
 
     return this.createUserRepository.execute(userData);

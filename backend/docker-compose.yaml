@@ -1,18 +1,18 @@
 services:
   postgres-db:
-    container_name: postgres-db
+    container_name: quiz-the-office-db
     image: postgres:16-alpine
     restart: always
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=fastify-ignite
+      - POSTGRES_DB=quiz_the_office
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=strongPassword
+      - POSTGRES_PASSWORD=theoffice123
     networks:
-      - fastify-ignite_net
+      - quiz_the_office_net
     volumes:
-      - fastify-ignite_pg_vol:/var/lib/postgresql/data
+      - quiz_the_office_pg_vol:/var/lib/postgresql/data
 
   # api:
   #   container_name: api
@@ -38,9 +38,8 @@ services:
   #     - MONGO_INITDB_ROOT_PASSWORD=secret
 
 volumes:
-  fastify-ignite_pg_vol:
-  fastify-ignite_redis_vol:
+  quiz_the_office_pg_vol:
 
 networks:
-  fastify-ignite_net:
-    name: fastify-ignite_net
+  quiz_the_office_net:
+    name: quiz_the_office_net
