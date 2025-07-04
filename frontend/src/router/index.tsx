@@ -1,19 +1,17 @@
-import { createBrowserRouter } from "react-router-dom";
-import { AppRoutes } from "./routes";
-import App from "@/presentation/app";
-import { PageA } from "@/presentation/app/example/page-a/page-a";
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { QuizPage } from "../presentation/app/quiz/page"
 
 const router = createBrowserRouter([
   {
-    path: AppRoutes.BASE.key,
-    element: <App />,
-    children: [
-      {
-        path: AppRoutes.BASE.EXAMPLE.pageA,
-        element: <PageA />,
-      },
-    ],
+    path: "/",
+    element: <QuizPage />,
   },
-]);
+  {
+    path: "/quiz",
+    element: <QuizPage />,
+  },
+])
 
-export { router };
+export const AppRouter = () => {
+  return <RouterProvider router={router} />
+}
