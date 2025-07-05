@@ -7,19 +7,14 @@ export class GetQuestionService {
     this.getQuestionRepository = getQuestionRepository;
   }
 
-  async execute(id: string, includeCorrectAnswers: boolean = false) {
+  async execute(id: string, includeCorrectAnswers: boolean = true) {
     const question = await this.getQuestionRepository.execute(id);
 
     if (!question) {
       return null;
     }
 
-    // If not including correct answers (for quiz mode), hide the correct answer
-    if (!includeCorrectAnswers) {
-      const { correctAnswer, ...questionWithoutAnswer } = question;
-      return questionWithoutAnswer;
-    }
-
+    // Always return all fields including correctAnswer
     return question;
   }
 }

@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Input } from "@/components/ui/input"
+import { Button } from "../components/ui/button"
+import { Card, CardContent } from "../components/ui/card"
+import { Badge } from "../components/ui/badge"
+import { Progress } from "../components/ui/progress"
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
+import { Input } from "../components/ui/input"
 import {
   Trophy,
   Share2,
@@ -363,10 +363,10 @@ export default function TheOfficeQuiz() {
   }
 
   const pageTransition = {
-    type: "tween",
-    ease: "anticipate",
+    type: "tween" as const,
+    ease: "anticipate" as const,
     duration: 0.5,
-  }
+  } as const
 
   const slideVariants = {
     initial: { opacity: 0, x: 100 },
@@ -587,9 +587,9 @@ export default function TheOfficeQuiz() {
                         type="text"
                         placeholder="Digite seu nome..."
                         value={playerName}
-                        onChange={(e) => setPlayerName(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlayerName(e.target.value)}
                         className="text-center text-lg font-medium border-2 border-gray-200 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-500 rounded-2xl bg-gray-50 dark:bg-gray-700 py-4 px-6 text-gray-800 dark:text-white"
-                        onKeyPress={(e) => e.key === "Enter" && handleStartQuiz()}
+                        onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && handleStartQuiz()}
                       />
                     </div>
                   </div>
@@ -635,7 +635,7 @@ export default function TheOfficeQuiz() {
                       <h3 className="font-bold text-gray-700 dark:text-gray-300">Melhores Pontuações</h3>
                     </div>
                     <div className="space-y-3">
-                      {ranking.slice(0, 3).map((player, index) => (
+                      {ranking.slice(0, 3).map((player: PlayerResult, index: number) => (
                         <motion.div
                           key={index}
                           initial={{ x: -20, opacity: 0 }}
@@ -1094,7 +1094,7 @@ export default function TheOfficeQuiz() {
                   </div>
                 ) : (
                   <div className="divide-y divide-gray-100 dark:divide-gray-700">
-                    {ranking.map((player, index) => {
+                    {ranking.map((player: PlayerResult, index: number) => {
                       const character = quizData.characters.find((c) => c.name === player.character)
                       return (
                         <motion.div

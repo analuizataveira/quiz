@@ -17,14 +17,7 @@ export class ListQuestionService {
   }) {
     const questions = await this.listQuestionRepository.execute(filters);
 
-    // If not including correct answers (for quiz mode), hide the correct answer
-    if (!filters?.includeCorrectAnswers) {
-      return questions.map(question => {
-        const { correctAnswer, ...questionWithoutAnswer } = question;
-        return questionWithoutAnswer;
-      });
-    }
-
+    // Always return all fields including correctAnswer
     return questions;
   }
 }
